@@ -6,10 +6,10 @@ RUN apt-get update && apt-get install -y \
 
 COPY ./conf/mariadb.cnf /etc/mysql/mariadb.conf.d/mariadb.cnf
 
-COPY ./tools/setup.sh /usr/local/bin/setup.sh
+COPY ./tools/script.sh /usr/local/bin/script.sh
 
-RUN chmod +x /usr/local/bin/setup.sh
+RUN chmod +x /usr/local/bin/script.sh
 
 EXPOSE 3306
 
-ENTRYPOINT ["/usr/local/bin/setup.sh"]
+ENTRYPOINT ["/usr/local/bin/script.sh"]
