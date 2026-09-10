@@ -36,4 +36,4 @@ fi
 
 chown -R www-data:www-data /var/www/html
 
-exec php7.4-fpm -F
+exec php8.2-fpm -F
