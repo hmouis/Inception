@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ ! -f /etc/nginx/ssl/inception.crt]; then
+if [ ! -f /etc/nginx/ssl/inception.crt ]; then
 
 echo "Generating SSL certificate..."
 
