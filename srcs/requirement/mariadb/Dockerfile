@@ -1,10 +1,9 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 RUN apt-get update && apt-get install -y \
-    mariadb-server \
-    mariadb-client
+    mariadb-server 
 
-COPY ./conf/mariadb.cnf /etc/mysql/mariadb.conf.d/mariadb.cnf
+COPY ./conf/mariadb.conf /etc/mysql/mariadb.conf.d/mariadb.conf
 
 COPY ./tools/script.sh /usr/local/bin/script.sh
 
