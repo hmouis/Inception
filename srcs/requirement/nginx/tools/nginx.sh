@@ -7,7 +7,7 @@ echo "Generating SSL certificate..."
 openssl req -x509 -nodes -days 365 \
     -out /etc/nginx/ssl/inception.crt \
     -keyout /etc/nginx/ssl/inception.key \
-    -subj "/C=MA/ST=Morocco/L=BenGuerir/O=1337/OU=42/CN=$DOMAIN_NAME/UID=$LOGIN"
+    -subj "/C=MA/ST=Morocco/L=BenGuerir/O=1337/OU=42/CN=$DOMAIN_NAME/UID=hodaifa"
 
 echo "SSL certificate generated."
 fi

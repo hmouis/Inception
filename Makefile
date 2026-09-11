@@ -1,6 +1,6 @@
 NAME		= inception
 
-COMPOSE		= docker compose -f srcs/docker-compose.yml --env-file srcs/.env
+COMPOSE		= docker compose -f srcs/docker-compose.yml
 
 all: up
 
@@ -9,7 +9,7 @@ up:
 	   	docker compose -f srcs/docker-compose.yml up -d --build
 
 down:
-	$(COMPOSE) down
+	$(COMPOSE) down --volumes
 
 stop:
 	$(COMPOSE) stop
@@ -33,8 +33,9 @@ build:
 clean:
 	$(COMPOSE) down --rmi all 
 
-fclean: down
+fclean: down clean
 	sudo rm -rf /home/hmouis/data
+
 re:
 	$(MAKE) fclean
 	$(MAKE) all
