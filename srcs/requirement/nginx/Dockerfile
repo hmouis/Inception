@@ -6,7 +6,7 @@ RUN apt update && apt install -y \
 RUN mkdir -p /etc/nginx/ssl
 RUN mkdir -p /var/run/nginx
 
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx.conf /etc/nginx/conf.d/default.conf
 COPY tools/nginx.sh /usr/local/bin/nginx.sh
 
 RUN chmod +x /usr/local/bin/nginx.sh
