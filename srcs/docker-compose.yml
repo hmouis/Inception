@@ -5,6 +5,7 @@ services:
       context: ./requirement/mariadb
       dockerfile: Dockerfile
     container_name: mariadb
+    restart: unless-stopped
     env_file:
       - ./.env
     volumes:
@@ -17,6 +18,7 @@ services:
       context: ./requirement/wordpress
       dockerfile: Dockerfile
     container_name: wordpress
+    restart: unless-stopped
     env_file:
       - ./.env
     depends_on:
@@ -31,6 +33,7 @@ services:
       context: ./requirement/nginx
       dockerfile: Dockerfile
     container_name: nginx
+    restart: unless-stopped
     env_file:
       - ./.env
     depends_on:
@@ -59,4 +62,5 @@ volumes:
 
 networks:
   inception:
+      driver: bridge
  
