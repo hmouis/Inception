@@ -5,14 +5,17 @@ mkdir -p /run/mysqld
 chown mysql:mysql /run/mysqld
 
 if [ ! -d /var/lib/mysql/mysql ]; then
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql
+fi
 
-mariadb-install-db --user=mysql --datadir=/var/lib/mysql
-service mariadb start
-until mariadb-admin ping --silent; do
+mysqld_safe --user=mysql --bind-address=0.0.0.0 &
+
+until mysql -u root -e "SELECT 1;" >/dev/null 2>&1
+do
     sleep 1
 done
 
-mariadb -u root << EOF
+mysql -u root -p"${MYSQL_ROOT_PASSWORD}" << EOF
 CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
 CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
 GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
@@ -22,5 +25,4 @@ EOF
 
 mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
 
-fi
-exec mysqld
+exec mysqld --user=mysql --datadir=/var/lib/mysql --bind-address=0.0.0.0
