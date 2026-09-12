@@ -1,39 +1,48 @@
 #!/bin/bash
 
+set -e
+
 cd /var/www/html
 
-if [ ! -f /var/www/html/index.php ]; then
-    echo "Downloading WordPress..."
-
-    wget https://wordpress.org/latest.tar.gz
-    tar -xzf latest.tar.gz --strip-components=1
-    rm latest.tar.gz
-
-    echo "WordPress downloaded successfully."
-fi
-
 echo "Waiting for MariaDB..."
-
 until mariadb -h"$DB_HOST" -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "SELECT 1" > /dev/null 2>&1
 do
     sleep 2
 done
-
 echo "MariaDB is ready!"
 
 if [ ! -f /var/www/html/wp-config.php ]; then
+    echo "Downloading WordPress core..."
+    wp core download --allow-root
+
     echo "Creating wp-config.php..."
+    wp config create \
+        --dbname="${MYSQL_DATABASE}" \
+        --dbuser="${MYSQL_USER}" \
+        --dbpass="${MYSQL_PASSWORD}" \
+        --dbhost="${DB_HOST}" \
+        --allow-root
 
-    cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+    echo "Installing WordPress..."
+    wp core install \
+        --url="${DOMAIN_NAME}" \
+        --title="${WP_TITLE}" \
+        --admin_user="${WP_ADMIN_USER}" \
+        --admin_password="${WP_ADMIN_PASSWORD}" \
+        --admin_email="${WP_ADMIN_EMAIL}" \
+        --skip-email \
+        --allow-root
 
-    sed -i "s/database_name_here/$MYSQL_DATABASE/" /var/www/html/wp-config.php
-    sed -i "s/username_here/$MYSQL_USER/" /var/www/html/wp-config.php
-    sed -i "s/password_here/$MYSQL_PASSWORD/" /var/www/html/wp-config.php
-    sed -i "s/localhost/$DB_HOST/" /var/www/html/wp-config.php
+    echo "Creating secondary user..."
+    wp user create \
+        "${WP_USER}" "${WP_USER_EMAIL}" \
+        --role=author \
+        --user_pass="${WP_USER_PASSWORD}" \
+        --allow-root
 
-    echo "wp-config.php created."
+    echo "WordPress installed successfully."
 fi
 
 chown -R www-data:www-data /var/www/html
 
-exec php7.4-fpm -F
+exec /usr/sbin/php-fpm8.2 -F
