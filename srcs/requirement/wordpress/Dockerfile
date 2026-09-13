@@ -18,7 +18,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     && mv wp-cli.phar /usr/local/bin/wp
 
 COPY tools/wordpress.sh /usr/local/bin/wordpress.sh
-RUN sed -i 's#^listen = /run/php/php8.2-fpm.sock#listen = 0.0.0.0:9000#' /etc/php/8.2/fpm/pool.d/www.conf
+COPY conf/wordpress.conf /etc/php/8.2/fpm/pool.d/www.conf
 RUN chmod +x /usr/local/bin/wordpress.sh
 
 ENTRYPOINT ["/usr/local/bin/wordpress.sh"]
