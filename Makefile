@@ -11,21 +11,12 @@ up:
 down:
 	$(COMPOSE) down --volumes
 
-stop:
-	$(COMPOSE) stop
-
 start:
 	$(COMPOSE) start
 
 restart:
 	$(COMPOSE) down
 	$(COMPOSE) up -d --build
-
-logs:
-	$(COMPOSE) logs -f
-
-ps:
-	$(COMPOSE) ps
 
 build:
 	$(COMPOSE) build
