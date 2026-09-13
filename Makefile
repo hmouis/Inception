@@ -31,4 +31,4 @@ re:
 	$(MAKE) fclean
 	$(MAKE) all
 
-.PHONY: all up down stop start restart logs ps build clean fclean re
+.PHONY: all up down start restart build clean fclean re
